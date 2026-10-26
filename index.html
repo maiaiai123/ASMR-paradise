@@ -1,0 +1,1163 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#f8f2ff">
+  <title>Тихий мир — антистресс-игры</title>
+  <style>
+    :root {
+      --ink: #302841;
+      --muted: #81768e;
+      --pink: #ff8eb4;
+      --violet: #a58bff;
+      --mint: #9ce9d2;
+      --paper: rgba(255, 255, 255, .82);
+      --shadow: 0 18px 55px rgba(89, 67, 123, .13);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--ink);
+      font-family: ui-rounded, "Trebuchet MS", system-ui, sans-serif;
+      background:
+        radial-gradient(ellipse at 12% 8%, #ffe3ee 0, transparent 28%),
+        radial-gradient(ellipse at 92% 15%, #dcd8ff 0, transparent 32%),
+        radial-gradient(ellipse at 50% 100%, #d9fff2 0, transparent 34%),
+        #f8f5ff;
+    }
+
+    button, input { font: inherit; }
+    button { color: inherit; }
+
+    .app {
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      margin-bottom: 22px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 13px;
+    }
+
+    .brand-mark {
+      display: grid;
+      width: 52px;
+      height: 52px;
+      place-items: center;
+      border-radius: 18px;
+      background: linear-gradient(135deg, #ffadd0, #b8a5ff);
+      box-shadow: 0 8px 22px #c2a8ed66;
+      font-size: 27px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(21px, 4vw, 30px);
+      letter-spacing: -.7px;
+    }
+
+    .subtitle {
+      margin: 3px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .sound-button, .soft-button {
+      border: 1px solid #e9e1f3;
+      border-radius: 14px;
+      padding: 10px 14px;
+      background: #fff9;
+      cursor: pointer;
+      transition: .2s ease;
+    }
+
+    .sound-button:hover, .soft-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px #705a8f1f;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 225px minmax(0, 1fr);
+      gap: 20px;
+      align-items: start;
+    }
+
+    .sidebar, .main-card {
+      border: 1px solid #fff;
+      border-radius: 25px;
+      background: var(--paper);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(14px);
+    }
+
+    .sidebar {
+      position: sticky;
+      top: 16px;
+      padding: 14px;
+    }
+
+    .nav-title {
+      margin: 7px 9px 10px;
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+    }
+
+    .nav-button {
+      display: flex;
+      width: 100%;
+      align-items: center;
+      gap: 11px;
+      margin: 4px 0;
+      padding: 11px;
+      border: 0;
+      border-radius: 14px;
+      background: transparent;
+      text-align: left;
+      cursor: pointer;
+      transition: .2s ease;
+    }
+
+    .nav-button:hover { background: #f4efff; transform: translateX(2px); }
+
+    .nav-button.active {
+      color: #5d4694;
+      background: linear-gradient(110deg, #f1eaff, #ffeaf2);
+      font-weight: 800;
+    }
+
+    .nav-icon { width: 25px; text-align: center; font-size: 20px; }
+
+    .main-card {
+      min-height: 650px;
+      padding: clamp(18px, 3vw, 30px);
+      overflow: hidden;
+    }
+
+    .scene-heading {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 18px;
+    }
+
+    .scene-heading h2 { margin: 0; font-size: clamp(24px, 4vw, 32px); }
+    .scene-heading p { margin: 6px 0 0; color: var(--muted); }
+
+    .badge {
+      flex: 0 0 auto;
+      padding: 8px 12px;
+      border-radius: 99px;
+      color: #715a9c;
+      background: #f0eaff;
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .play-area {
+      position: relative;
+      min-height: 420px;
+      overflow: hidden;
+      border: 1px solid #fff;
+      border-radius: 22px;
+      background:
+        radial-gradient(circle at 20% 20%, #fff9 0 2px, transparent 3px),
+        linear-gradient(145deg, #fff7fc, #f2efff 58%, #eafff8);
+      box-shadow: inset 0 0 45px #d9c9ee20;
+    }
+
+    .hint {
+      margin: 13px 2px 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px;
+      margin-top: 15px;
+    }
+
+    .control {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 12px;
+      border: 1px solid #eee7f5;
+      border-radius: 14px;
+      background: #fff9;
+      font-size: 13px;
+    }
+
+    input[type="color"] {
+      width: 32px;
+      height: 28px;
+      padding: 2px;
+      border: 0;
+      background: transparent;
+      cursor: pointer;
+    }
+
+    input[type="range"] { width: 105px; accent-color: #a58bff; }
+
+    .primary-button {
+      border: 0;
+      border-radius: 14px;
+      padding: 11px 16px;
+      color: white;
+      background: linear-gradient(115deg, #a58bff, #ff8eb4);
+      box-shadow: 0 8px 18px #b48bdc44;
+      cursor: pointer;
+      font-weight: 800;
+      transition: .2s ease;
+    }
+
+    .primary-button:hover { transform: translateY(-2px); }
+
+    /* Слайм */
+    #slimeCanvas, #sandCanvas {
+      display: block;
+      width: 100%;
+      height: 420px;
+      touch-action: none;
+      cursor: grab;
+    }
+    #slimeCanvas:active, #sandCanvas:active { cursor: grabbing; }
+
+    /* Попиты */
+    .popit-board {
+      display: grid;
+      grid-template-columns: repeat(8, minmax(25px, 1fr));
+      gap: clamp(7px, 1.5vw, 15px);
+      width: min(560px, 92%);
+      margin: 48px auto;
+      padding: clamp(18px, 5vw, 34px);
+      border: 5px solid #fff9;
+      border-radius: 35px;
+      background: linear-gradient(145deg, #ffc0d7, #c5b3ff 55%, #a3edd9);
+      box-shadow: 0 20px 36px #8765a333, inset 0 4px 15px #fff9;
+      transform: rotate(-2deg);
+    }
+
+    .bubble {
+      aspect-ratio: 1;
+      border: 0;
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 28%, #fff9, #ffffff55 27%, #b17cd655 70%);
+      box-shadow: inset 0 -5px 8px #8052aa30, 0 3px 5px #715b8c22;
+      cursor: pointer;
+      transition: transform .17s ease, box-shadow .17s ease;
+    }
+
+    .bubble:hover { transform: scale(1.06); }
+    .bubble.popped {
+      transform: scale(.82);
+      background: radial-gradient(circle at 40% 35%, #9b78bd55, #ffffff33 65%);
+      box-shadow: inset 0 4px 8px #674f8933;
+    }
+
+    /* Мыло */
+    .soap-board {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 4px;
+      width: min(560px, 90%);
+      margin: 70px auto 40px;
+      padding: 22px;
+      border-radius: 30px;
+      background: linear-gradient(135deg, #ffc1d8, #dbbbff 50%, #a9eee0);
+      box-shadow: 0 20px 35px #8f75a333, inset 0 3px 12px #fff9;
+      transform: rotate(-2deg);
+    }
+
+    .soap-piece {
+      min-height: 47px;
+      border: 1px solid #fff8;
+      border-radius: 12px;
+      background: linear-gradient(145deg, #fff7f3, #ffb3cf);
+      box-shadow: inset 0 3px 8px #fff, 0 4px 6px #75577322;
+      cursor: crosshair;
+      transition: .22s ease;
+    }
+
+    .soap-piece:nth-child(3n) { background: linear-gradient(145deg, #fff8ce, #ffc7a7); }
+    .soap-piece:nth-child(3n + 1) { background: linear-gradient(145deg, #e4fff2, #9ee8d8); }
+    .soap-piece.cut { transform: scale(.2) rotate(35deg); opacity: 0; pointer-events: none; }
+
+    /* Холодильник */
+    .fridge-layout {
+      display: grid;
+      grid-template-columns: 1fr 1.2fr;
+      gap: 20px;
+      padding: 22px;
+    }
+
+    .fruit-tray, .fridge {
+      padding: 17px;
+      border: 1px solid #fff;
+      border-radius: 22px;
+      background: #ffffffa6;
+    }
+
+    .fruit-tray h3, .fridge h3 { margin: 0 0 13px; font-size: 16px; }
+    .fruit-list { display: flex; flex-wrap: wrap; gap: 9px; }
+
+    .fruit {
+      display: grid;
+      min-width: 54px;
+      min-height: 56px;
+      place-items: center;
+      border: 1px solid #eee5f4;
+      border-radius: 15px;
+      background: #fff;
+      font-size: 29px;
+      cursor: grab;
+      user-select: none;
+      transition: .2s ease;
+    }
+
+    .fruit:hover { transform: translateY(-3px) rotate(-4deg); }
+    .fruit.used { opacity: .3; }
+
+    .fridge {
+      min-height: 295px;
+      border: 7px solid #e9e4f1;
+      border-radius: 22px 22px 30px 30px;
+      background: linear-gradient(110deg, #fff, #f5f2fb);
+      box-shadow: inset 0 0 18px #c9bfd333;
+    }
+
+    .shelf {
+      display: flex;
+      min-height: 64px;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 7px;
+      margin: 10px 0;
+      padding: 5px 8px;
+      border-bottom: 5px solid #dcd5e7;
+      border-radius: 5px;
+    }
+
+    .shelf .fruit { min-width: 42px; min-height: 43px; border: 0; background: transparent; font-size: 25px; }
+
+    /* Букет */
+    .bouquet-layout { display: grid; grid-template-columns: minmax(0, 1fr) 1.1fr; gap: 18px; }
+    .flower-catalog {
+      display: grid;
+      max-height: 380px;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 7px;
+      overflow: auto;
+      padding: 8px;
+      border-radius: 18px;
+      background: #ffffffa3;
+    }
+
+    .flower-option {
+      min-width: 0;
+      padding: 8px 3px;
+      border: 1px solid #eee6f5;
+      border-radius: 12px;
+      background: white;
+      cursor: grab;
+      text-align: center;
+      transition: .18s ease;
+    }
+
+    .flower-option:hover { transform: translateY(-3px); background: #fff2f8; }
+    .flower-option .flower-emoji { display: block; font-size: 24px; }
+    .flower-option small { display: block; overflow: hidden; color: var(--muted); font-size: 9px; text-overflow: ellipsis; }
+
+    .bouquet-zone {
+      position: relative;
+      display: flex;
+      min-height: 355px;
+      flex-wrap: wrap;
+      align-content: center;
+      justify-content: center;
+      gap: 4px;
+      padding: 35px 20px 55px;
+      overflow: hidden;
+      border: 2px dashed #d8c9ea;
+      border-radius: 24px;
+      background: radial-gradient(ellipse at 50% 100%, #d5f4df 0 18%, transparent 19%), linear-gradient(#fff9, #ffeff6);
+      transition: .2s ease;
+    }
+
+    .bouquet-zone.drag-over { border-color: #a58bff; background-color: #f5edff; }
+    .bouquet-flower {
+      position: relative;
+      display: inline-grid;
+      width: 38px;
+      height: 105px;
+      place-items: start center;
+      color: #439773;
+      font-size: 30px;
+      transform-origin: bottom;
+      animation: flowerIn .5s cubic-bezier(.2, 1.5, .5, 1) both;
+    }
+    .bouquet-flower::after {
+      position: absolute;
+      top: 37px;
+      left: 18px;
+      width: 3px;
+      height: 67px;
+      border-radius: 5px;
+      background: linear-gradient(#65bd83, #35835e);
+      content: "";
+      z-index: -1;
+    }
+    .bouquet-flower:nth-child(odd) { transform: rotate(-8deg); }
+    .bouquet-flower:nth-child(even) { transform: rotate(7deg); }
+    .wrap-ribbon {
+      position: absolute;
+      bottom: 24px;
+      width: 75%;
+      height: 48px;
+      border-radius: 8px 8px 30px 30px;
+      background: linear-gradient(110deg, #ffc6daaa, #b9a6ffbb);
+      clip-path: polygon(0 0,100% 0,78% 100%,50% 80%,22% 100%);
+      pointer-events: none;
+    }
+
+    @keyframes flowerIn { from { opacity: 0; transform: translateY(25px) scale(.6) rotate(0); } to { opacity: 1; } }
+
+    /* Песок */
+    .sand-controls { display: flex; gap: 8px; flex-wrap: wrap; margin: 14px 0; }
+    .sand-color { width: 30px; height: 30px; border: 3px solid white; border-radius: 50%; cursor: pointer; box-shadow: 0 2px 8px #0002; }
+
+    /* Пузыри */
+    .bubble-playground {
+      position: relative;
+      min-height: 420px;
+      overflow: hidden;
+      border-radius: 22px;
+      background: linear-gradient(180deg, #f4f0ff, #e4fff7);
+    }
+    .floating-bubble {
+      position: absolute;
+      display: grid;
+      width: var(--size);
+      height: var(--size);
+      place-items: center;
+      border: 1px solid #fff;
+      border-radius: 50%;
+      background: radial-gradient(circle at 30% 25%, #fff, #ffc8e688 35%, #a7d9ff77 70%, #fff8);
+      box-shadow: inset -5px -8px 14px #a58bff22, 0 5px 15px #9178b333;
+      cursor: pointer;
+      animation: floatUp var(--duration) linear infinite;
+    }
+    @keyframes floatUp { from { transform: translateY(450px) translateX(0); } to { transform: translateY(-150px) translateX(25px); } }
+
+    .toast {
+      position: fixed;
+      right: 22px;
+      bottom: 22px;
+      z-index: 5;
+      padding: 12px 17px;
+      border: 1px solid white;
+      border-radius: 15px;
+      background: #fff;
+      box-shadow: var(--shadow);
+      opacity: 0;
+      transform: translateY(10px);
+      pointer-events: none;
+      transition: .25s ease;
+    }
+    .toast.show { opacity: 1; transform: translateY(0); }
+
+    @media (max-width: 780px) {
+      .app { padding: 14px; }
+      .layout { grid-template-columns: 1fr; }
+      .sidebar { position: static; padding: 9px; }
+      .nav-title { display: none; }
+      .nav-list { display: flex; gap: 5px; overflow-x: auto; }
+      .nav-button { width: auto; flex: 0 0 auto; margin: 0; padding: 9px 11px; }
+      .nav-label { display: none; }
+      .nav-icon { width: auto; font-size: 22px; }
+      .main-card { min-height: 560px; }
+      .fridge-layout, .bouquet-layout { grid-template-columns: 1fr; }
+      .fridge { min-height: 250px; }
+      .flower-catalog { max-height: 230px; grid-template-columns: repeat(6, 1fr); }
+      .play-area, #slimeCanvas, #sandCanvas { min-height: 350px; height: 350px; }
+    }
+
+    @media (max-width: 430px) {
+      .subtitle { font-size: 11px; }
+      .sound-button { padding: 9px; font-size: 12px; }
+      .popit-board { grid-template-columns: repeat(6, 1fr); }
+      .soap-board { grid-template-columns: repeat(5, 1fr); }
+      .flower-catalog { grid-template-columns: repeat(5, 1fr); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; transition-duration: .01ms !important; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header>
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true">☁️</div>
+        <div>
+          <h1>Тихий мир</h1>
+          <p class="subtitle">Маленькая пауза для большого спокойствия</p>
+        </div>
+      </div>
+      <button class="sound-button" id="soundToggle" type="button" aria-pressed="true">🔊 Звук включён</button>
+    </header>
+
+    <div class="layout">
+      <aside class="sidebar">
+        <div class="nav-title">Выбери занятие</div>
+        <nav class="nav-list" id="navigation" aria-label="Разделы игры"></nav>
+      </aside>
+      <main class="main-card" id="scene" aria-live="polite"></main>
+    </div>
+  </div>
+  <div class="toast" id="toast" role="status"></div>
+
+  <script>
+    (() => {
+      "use strict";
+
+      const sections = [
+        { id: "slime", icon: "🫧", label: "Слайм", title: "Мягкий слайм", desc: "Тяни, нажимай и создай свой волшебный цвет.", badge: "ТЯНИ И МНИ" },
+        { id: "popit", icon: "🟣", label: "Попиты", title: "Попит-студия", desc: "Нажимай пузырьки и слушай приятные щелчки.", badge: "POP · POP" },
+        { id: "soap", icon: "🧼", label: "Мыло", title: "Мыльная мастерская", desc: "Нарезай мыло на маленькие ароматные кубики.", badge: "РЕЖЬ КУСОЧКИ" },
+        { id: "fridge", icon: "🍓", label: "Холодильник", title: "Уютный холодильник", desc: "Перетаскивай продукты на полочки и наведи порядок.", badge: "РАЗЛОЖИ ФРУКТЫ" },
+        { id: "bouquet", icon: "💐", label: "Букет", title: "Цветочная мастерская", desc: "Выбирай цветы и собери букет своей мечты.", badge: "100 ЦВЕТОВ" },
+        { id: "sand", icon: "🏖️", label: "Песок", title: "Рисуем песком", desc: "Веди пальцем по холсту и оставляй мягкий цветной след.", badge: "РИСУЙ ПАЛЬЦЕМ" },
+        { id: "bubbles", icon: "🫧", label: "Пузырьки", title: "Лови пузырьки", desc: "Лопай радужные пузыри и слушай лёгкие звуки.", badge: "ЛОПАЙ" },
+        { id: "stones", icon: "🪨", label: "Камушки", title: "Сад камушков", desc: "Перетаскивай камушки и складывай спокойные узоры.", badge: "СОЗДАЙ УЗОР" }
+      ];
+      const nav = document.getElementById("navigation");
+      const scene = document.getElementById("scene");
+      const toast = document.getElementById("toast");
+      let soundOn = true;
+      let audioContext = null;
+      let currentSandColor = "#d3a8ff";
+      let toastTimer;
+
+      const fruits = [
+        ["🍓", "Клубника"], ["🍊", "Апельсин"], ["🍇", "Виноград"], ["🍎", "Яблоко"],
+        ["🍐", "Груша"], ["🍌", "Банан"], ["🍉", "Арбуз"], ["🍍", "Ананас"],
+        ["🥝", "Киви"], ["🫐", "Черника"], ["🍑", "Персик"], ["🍒", "Вишня"]
+      ];
+
+      const flowerEmojis = ["🌷", "🌸", "🌼", "🌻", "🌹", "💐", "🪻", "🌺", "🏵️", "🪷"];
+      const flowerNames = ["Тюльпан", "Сакура", "Ромашка", "Подсолнух", "Роза", "Букетик", "Лаванда", "Гибискус", "Астра", "Лотос"];
+      const flowerColors = ["розовый", "персиковый", "лиловый", "снежный", "коралловый", "золотой", "мятный", "малиновый", "небесный", "кремовый"];
+
+      function playTone(kind = "pop") {
+        if (!soundOn) return;
+        try {
+          const AudioCtx = window.AudioContext || window.webkitAudioContext;
+          if (!AudioCtx) return;
+          if (!audioContext) audioContext = new AudioCtx();
+          if (audioContext.state === "suspended") audioContext.resume();
+
+          const oscillator = audioContext.createOscillator();
+          const gain = audioContext.createGain();
+          const now = audioContext.currentTime;
+          const tones = { pop: 520, soft: 330, sparkle: 760, cut: 420, drop: 600 };
+          oscillator.type = kind === "soft" ? "sine" : "triangle";
+          oscillator.frequency.setValueAtTime(tones[kind] || 500, now);
+          oscillator.frequency.exponentialRampToValueAtTime((tones[kind] || 500) * 0.65, now + 0.11);
+          gain.gain.setValueAtTime(0.0001, now);
+          gain.gain.exponentialRampToValueAtTime(0.12, now + 0.012);
+          gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.16);
+          oscillator.connect(gain);
+          gain.connect(audioContext.destination);
+          oscillator.start(now);
+          oscillator.stop(now + 0.17);
+        } catch (error) {
+          // Звук необязателен: игра продолжит работать, даже если браузер его не поддерживает.
+        }
+      }
+
+      function showToast(message) {
+        toast.textContent = message;
+        toast.classList.add("show");
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(() => toast.classList.remove("show"), 1800);
+      }
+
+      function buildNavigation() {
+        nav.innerHTML = sections.map((item) =>
+          `<button class="nav-button" type="button" data-section="${item.id}" aria-label="${item.label}">
+            <span class="nav-icon" aria-hidden="true">${item.icon}</span>
+            <span class="nav-label">${item.label}</span>
+          </button>`
+        ).join("");
+
+        nav.addEventListener("click", (event) => {
+          const button = event.target.closest("[data-section]");
+          if (button) openSection(button.dataset.section);
+        });
+      }
+
+      function openSection(id) {
+        const item = sections.find((section) => section.id === id);
+        if (!item) return;
+
+        document.querySelectorAll(".nav-button").forEach((button) => {
+          const active = button.dataset.section === id;
+          button.classList.toggle("active", active);
+          button.setAttribute("aria-current", active ? "page" : "false");
+        });
+
+        scene.innerHTML = `
+          <div class="scene-heading">
+            <div><h2>${item.title}</h2><p>${item.desc}</p></div>
+            <span class="badge">${item.badge}</span>
+          </div>
+          <div id="gameArea"></div>
+        `;
+
+        const gameArea = document.getElementById("gameArea");
+        const renderers = {
+          slime: renderSlime,
+          popit: renderPopit,
+          soap: renderSoap,
+          fridge: renderFridge,
+          bouquet: renderBouquet,
+          sand: renderSand,
+          bubbles: renderBubbles,
+          stones: renderStones
+        };
+        renderers[id](gameArea);
+      }
+
+      function renderSlime(root) {
+        root.innerHTML = `
+          <div class="play-area"><canvas id="slimeCanvas" aria-label="Интерактивный слайм"></canvas></div>
+          <div class="controls">
+            <label class="control">🎨 Цвет <input id="slimeColor" type="color" value="#9e86ff"></label>
+            <label class="control">✨ Блёстки <input id="glitterToggle" type="checkbox" checked></label>
+            <label class="control">🫧 Размер <input id="slimeSize" type="range" min="0.7" max="1.3" step="0.05" value="1"></label>
+            <button class="soft-button" id="slimeReset" type="button">↻ Сначала</button>
+          </div>
+          <p class="hint">Зажми слайм пальцем или мышкой и потяни. Можно менять цвет и размер!</p>
+        `;
+
+        const canvas = document.getElementById("slimeCanvas");
+        const ctx = canvas.getContext("2d");
+        const colorInput = document.getElementById("slimeColor");
+        const glitterInput = document.getElementById("glitterToggle");
+        const sizeInput = document.getElementById("slimeSize");
+        let color = colorInput.value;
+        let scale = 1;
+        let pressed = false;
+        let pointer = { x: 0, y: 0 };
+        let sparkles = [];
+
+        function resize() {
+          const rect = canvas.getBoundingClientRect();
+          const ratio = Math.max(1, window.devicePixelRatio || 1);
+          canvas.width = Math.round(rect.width * ratio);
+          canvas.height = Math.round(rect.height * ratio);
+          ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
+        }
+
+        function draw() {
+          if (!canvas.isConnected) return;
+          const width = canvas.clientWidth;
+          const height = canvas.clientHeight;
+          ctx.clearRect(0, 0, width, height);
+
+          const cx = pressed ? pointer.x : width * 0.5;
+          const cy = pressed ? pointer.y : height * 0.53;
+          const radiusX = Math.min(width * 0.25, 145) * scale * (pressed ? 1.22 : 1);
+          const radiusY = Math.min(height * 0.25, 112) * scale * (pressed ? 0.73 : 1);
+
+          ctx.save();
+          ctx.shadowColor = color + "66";
+          ctx.shadowBlur = 30;
+          const gradient = ctx.createLinearGradient(cx - radiusX, cy - radiusY, cx + radiusX, cy + radiusY);
+          gradient.addColorStop(0, "#ffffff");
+          gradient.addColorStop(0.19, color);
+          gradient.addColorStop(0.75, color);
+          gradient.addColorStop(1, "#8069d9");
+          ctx.fillStyle = gradient;
+          ctx.beginPath();
+          ctx.moveTo(cx - radiusX, cy);
+          ctx.bezierCurveTo(cx - radiusX, cy - radiusY * 1.2, cx - radiusX * .42, cy - radiusY, cx, cy - radiusY);
+          ctx.bezierCurveTo(cx + radiusX * .72, cy - radiusY, cx + radiusX, cy - radiusY * .47, cx + radiusX, cy);
+          ctx.bezierCurveTo(cx + radiusX, cy + radiusY * .78, cx + radiusX * .42, cy + radiusY, cx, cy + radiusY);
+          ctx.bezierCurveTo(cx - radiusX * .7, cy + radiusY, cx - radiusX, cy + radiusY * .52, cx - radiusX, cy);
+          ctx.fill();
+          ctx.restore();
+
+          ctx.fillStyle = "#ffffffaa";
+          ctx.beginPath();
+          ctx.ellipse(cx - radiusX * .34, cy - radiusY * .49, radiusX * .2, radiusY * .09, -.35, 0, Math.PI * 2);
+          ctx.fill();
+
+          if (glitterInput.checked) {
+            for (let i = 0; i < 3; i++) {
+              const x = cx + (Math.random() - .5) * radiusX * 1.55;
+              const y = cy + (Math.random() - .5) * radiusY * 1.45;
+              ctx.fillStyle = `rgba(255,255,255,${0.45 + Math.random() * .5})`;
+              ctx.beginPath();
+              ctx.arc(x, y, Math.random() * 2.5 + 1, 0, Math.PI * 2);
+              ctx.fill();
+            }
+          }
+
+          sparkles = sparkles.filter((p) => p.life > 0);
+          sparkles.forEach((p) => {
+            ctx.globalAlpha = p.life;
+            ctx.fillStyle = "#fff8d6";
+            ctx.font = `${p.size}px sans-serif`;
+            ctx.fillText("✦", p.x, p.y);
+            p.y -= .55;
+            p.life -= .018;
+          });
+          ctx.globalAlpha = 1;
+          requestAnimationFrame(draw);
+        }
+        function position(event) {
+          const rect = canvas.getBoundingClientRect();
+          pointer = { x: event.clientX - rect.left, y: event.clientY - rect.top };
+        }
+
+        canvas.addEventListener("pointerdown", (event) => {
+          pressed = true;
+          canvas.setPointerCapture(event.pointerId);
+          position(event);
+          playTone("soft");
+        });
+        canvas.addEventListener("pointermove", (event) => {
+          position(event);
+          if (pressed && glitterInput.checked && Math.random() > .55) {
+            sparkles.push({ x: pointer.x, y: pointer.y, life: 1, size: 12 + Math.random() * 10 });
+          }
+        });
+        canvas.addEventListener("pointerup", () => { pressed = false; playTone("soft"); });
+        canvas.addEventListener("pointercancel", () => { pressed = false; });
+        colorInput.addEventListener("input", () => { color = colorInput.value; });
+        sizeInput.addEventListener("input", () => { scale = Number(sizeInput.value); });
+        document.getElementById("slimeReset").addEventListener("click", () => {
+          colorInput.value = "#9e86ff";
+          color = colorInput.value;
+          sizeInput.value = "1";
+          scale = 1;
+          sparkles = [];
+          showToast("Слайм снова мягкий и красивый ✨");
+        });
+
+        resize();
+        window.addEventListener("resize", resize, { once: true });
+        requestAnimationFrame(draw);
+      }
+
+      function renderPopit(root) {
+        root.innerHTML = `
+          <div class="play-area">
+            <div class="popit-board" id="popitBoard" aria-label="Попит, нажимай на пузырьки"></div>
+          </div>
+          <div class="controls">
+            <button class="soft-button" id="popitReset" type="button">↻ Перевернуть попит</button>
+            <span class="hint" id="popitCount">Нажато: 0</span>
+          </div>
+          <p class="hint">Нажимай на пузырьки — они будут переворачиваться и издавать мягкий щелчок.</p>
+        `;
+        const board = document.getElementById("popitBoard");
+        let count = 0;
+        board.innerHTML = Array.from({ length: 40 }, () => '<button class="bubble" type="button" aria-label="Пузырёк"></button>').join("");
+        board.addEventListener("click", (event) => {
+          const bubble = event.target.closest(".bubble");
+          if (!bubble) return;
+          bubble.classList.toggle("popped");
+          count += bubble.classList.contains("popped") ? 1 : -1;
+          document.getElementById("popitCount").textContent = `Нажато: ${count}`;
+          playTone("pop");
+        });
+        document.getElementById("popitReset").addEventListener("click", () => {
+          board.querySelectorAll(".bubble").forEach((bubble) => bubble.classList.remove("popped"));
+          count = 0;
+          document.getElementById("popitCount").textContent = "Нажато: 0";
+          playTone("soft");
+        });
+      }
+
+      function renderSoap(root) {
+        root.innerHTML = `
+          <div class="play-area">
+            <div class="soap-board" id="soapBoard" aria-label="Мыло для нарезки"></div>
+          </div>
+          <div class="controls">
+            <button class="soft-button" id="soapReset" type="button">🧼 Новое мыло</button>
+            <span class="hint" id="soapCount">Кусочков осталось: 30</span>
+          </div>
+          <p class="hint">Нажимай на кусочки, чтобы аккуратно нарезать мыло. Сделай себе маленький мыльный дождь!</p>
+        `;
+        const board = document.getElementById("soapBoard");
+
+        function resetSoap() {
+          board.innerHTML = Array.from({ length: 30 }, () => '<button class="soap-piece" type="button" aria-label="Кусочек мыла"></button>').join("");
+          document.getElementById("soapCount").textContent = "Кусочков осталось: 30";
+        }
+
+        board.addEventListener("click", (event) => {
+          const piece = event.target.closest(".soap-piece");
+          if (!piece || piece.classList.contains("cut")) return;
+          piece.classList.add("cut");
+          const remaining = board.querySelectorAll(".soap-piece:not(.cut)").length;
+          document.getElementById("soapCount").textContent = `Кусочков осталось: ${remaining}`;
+          playTone("cut");
+          if (remaining === 0) showToast("Готово! Мыльная плитка нарезана 🧼");
+        });
+        document.getElementById("soapReset").addEventListener("click", resetSoap);
+        resetSoap();
+      }
+
+      function renderFridge(root) {
+        root.innerHTML = `
+          <div class="play-area fridge-layout">
+            <div class="fruit-tray">
+              <h3>🍓 Продукты</h3>
+              <div class="fruit-list" id="fruitList"></div>
+            </div>
+            <div class="fridge" id="fridge">
+              <h3>❄️ Холодильник</h3>
+              <div class="shelf" data-shelf="1" aria-label="Верхняя полка"></div>
+              <div class="shelf" data-shelf="2" aria-label="Средняя полка"></div>
+              <div class="shelf" data-shelf="3" aria-label="Нижняя полка"></div>
+            </div>
+          </div>
+          <div class="controls">
+            <button class="soft-button" id="fridgeReset" type="button">↻ Вернуть продукты</button>
+            <span class="hint" id="fridgeCount">Разложено: 0</span>
+          </div>
+          <p class="hint">Перетаскивай продукты на полки. На телефоне можно просто нажать на фрукт — он сам займёт место.</p>
+        `;
+
+        const list = document.getElementById("fruitList");
+        const fridge = document.getElementById("fridge");
+        let placed = 0;
+        list.innerHTML = fruits.map(([emoji, name], index) =>
+          `<button class="fruit" type="button" draggable="true" data-fruit="${index}" aria-label="${name}" title="${name}">${emoji}</button>`
+        ).join("");
+
+        function placeFruit(index, sourceButton) {
+          if (!sourceButton || sourceButton.classList.contains("used")) return;
+          const shelves = [...fridge.querySelectorAll(".shelf")];
+          const targetShelf = shelves.find((shelf) => shelf.children.length < 5);
+          if (!targetShelf) {
+            showToast("Все полочки заполнены! 🧺");
+            return;
+          }
+          const [emoji, name] = fruits[index];
+          const item = document.createElement("span");
+          item.className = "fruit";
+          item.textContent = emoji;
+          item.title = name;
+          item.setAttribute("aria-label", name);
+          targetShelf.appendChild(item);
+          sourceButton.classList.add("used");
+          placed++;
+          document.getElementById("fridgeCount").textContent = `Разложено: ${placed}`;
+          playTone("drop");
+          if (placed === fruits.length) showToast("Какой уютный и полный холодильник! ❄️");
+        }
+
+        list.addEventListener("click", (event) => {
+          const button = event.target.closest(".fruit");
+          if (button) placeFruit(Number(button.dataset.fruit), button);
+        });
+
+        list.addEventListener("dragstart", (event) => {
+          const button = event.target.closest(".fruit");
+          if (!button || button.classList.contains("used")) return;
+          event.dataTransfer.setData("text/plain", button.dataset.fruit);
+          event.dataTransfer.effectAllowed = "move";
+        });
+
+        fridge.querySelectorAll(".shelf").forEach((shelf) => {
+          shelf.addEventListener("dragover", (event) => event.preventDefault());
+          shelf.addEventListener("drop", (event) => {
+            event.preventDefault();
+            const index = Number(event.dataTransfer.getData("text/plain"));
+            const source = list.querySelector(`[data-fruit="${index}"]`);
+            placeFruit(index, source);
+          });
+        });
+
+        document.getElementById("fridgeReset").addEventListener("click", () => {
+          renderFridge(root);
+          playTone("soft");
+        });
+      }
+
+      function renderBouquet(root) {
+        root.innerHTML = `
+          <div class="bouquet-layout">
+            <div>
+              <h3>Выбери цветы <span class="badge">100 вариантов</span></h3>
+              <div class="flower-catalog" id="flowerCatalog"></div>
+            </div>
+            <div>
+              <h3>Твой букет</h3>
+              <div class="bouquet-zone" id="bouquetZone" aria-label="Область для букета">
+                <div class="wrap-ribbon"></div>
+                <span class="empty-bouquet" id="bouquetHint" style="color:#988ba5;text-align:center">Перетащи цветок сюда<br>или нажми на него 🌷</span>
+              </div>
+              <div class="controls">
+                <button class="soft-button" id="bouquetClear" type="button">↻ Новый букет</button>
+                <span class="hint" id="bouquetCount">Цветов: 0</span>
+              </div>
+            </div>
+          </div>
+          <p class="hint">В каталоге 100 сочетаний цветов и оттенков. Перетащи понравившийся цветок в букет или нажми на него.</p>
+        `;
+
+        const catalog = document.getElementById("flowerCatalog");
+        const zone = document.getElementById("bouquetZone");
+        let flowerCount = 0;
+
+        catalog.innerHTML = Array.from({ length: 100 }, (_, index) => {
+          const type = index % flowerEmojis.length;
+          const shade = flowerColors[Math.floor(index / flowerEmojis.length)];
+          const name = `${flowerNames[type]} · ${shade}`;
+          return `<button class="flower-option" type="button" draggable="true" data-flower="${index}" data-name="${name}" aria-label="Добавить ${name}">
+            <span class="flower-emoji">${flowerEmojis[type]}</span><small>${name}</small>
+          </button>`;
+        }).join("");
+
+        function addFlower(index) {
+          const type = index % flowerEmojis.length;
+          const flower = document.createElement("span");
+          flower.className = "bouquet-flower";
+          flower.textContent = flowerEmojis[type];
+          flower.title = `${flowerNames[type]} · ${flowerColors[Math.floor(index / flowerEmojis.length)]}`;
+          flower.setAttribute("aria-label", flower.title);
+          const hint = document.getElementById("bouquetHint");
+          if (hint) hint.remove();
+          zone.insertBefore(flower, zone.querySelector(".wrap-ribbon"));
+          flowerCount++;
+          document.getElementById("bouquetCount").textContent = `Цветов: ${flowerCount}`;
+          playTone("sparkle");
+        }
+
+        catalog.addEventListener("click", (event) => {
+          const option = event.target.closest(".flower-option");
+          if (option) addFlower(Number(option.dataset.flower));
+        });
+
+        catalog.addEventListener("dragstart", (event) => {
+          const option = event.target.closest(".flower-option");
+          if (!option) return;
+          event.dataTransfer.setData("text/plain", option.dataset.flower);
+          event.dataTransfer.effectAllowed = "copy";
+        });
+
+        zone.addEventListener("dragover", (event) => {
+          event.preventDefault();
+          zone.classList.add("drag-over");
+        });
+        zone.addEventListener("dragleave", (event) => {
+          if (!zone.contains(event.relatedTarget)) zone.classList.remove("drag-over");
+        });
+        zone.addEventListener("drop", (event) => {
+          event.preventDefault();
+          zone.classList.remove("drag-over");
+          const index = Number(event.dataTransfer.getData("text/plain"));
+          if (Number.isInteger(index) && index >= 0 && index < 100) addFlower(index);
+        });
+
+        document.getElementById("bouquetClear").addEventListener("click", () => renderBouquet(root));
+      }
+
+      function renderSand(root) {
+        root.innerHTML = `
+          <div class="play-area"><canvas id="sandCanvas" aria-label="Холст для рисования цветным песком"></canvas></div>
+          <div class="sand-controls" aria-label="Цвет песка">
+            <button class="sand-color" type="button" data-color="#d3a8ff" style="background:#d3a8ff" aria-label="Лиловый"></button>
+            <button class="sand-color" type="button" data-color="#ff9fbd" style="background:#ff9fbd" aria-label="Розовый"></button>
+            <button class="sand-color" type="button" data-color="#8de0ca" style="background:#8de0ca" aria-label="Мятный"></button>
+            <button class="sand-color" type="button" data-color="#ffd477" style="background:#ffd477" aria-label="Жёлтый"></button>
+            <button class="sand-color" type="button" data-color="#8dc9ff" style="background:#8dc9ff" aria-label="Голубой"></button>
+            <button class="soft-button" id="sandClear" type="button">🧽 Очистить</button>
+          </div>
+          <p class="hint">Рисуй пальцем или мышкой. Выбери цвет и создай свой маленький шедевр.</p>
+        `;
+
+        const canvas = document.getElementById("sandCanvas");
+        const ctx = canvas.getContext("2d");
+        let drawing = false;
+
+        function resize() {
+          const rect = canvas.getBoundingClientRect();
+          const ratio = Math.max(1, window.devicePixelRatio || 1);
+          canvas.width = Math.round(rect.width * ratio);
+          canvas.height = Math.round(rect.height * ratio);
+          ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
+        }
+
+        function drawPoint(event) {
+          const rect = canvas.getBoundingClientRect();
+          const x = event.clientX - rect.left;
+          const y = event.clientY - rect.top;
+          ctx.fillStyle = currentSandColor;
+          for (let i = 0; i < 5; i++) {
+            const offsetX = (Math.random() - .5) * 18;
+            const offsetY = (Math.random() - .5) * 18;
+            ctx.globalAlpha = .38 + Math.random() * .5;
+            ctx.beginPath();
+            ctx.arc(x + offsetX, y + offsetY, 2 + Math.random() * 4, 0, Math.PI * 2);
+            ctx.fill();
+          }
+          ctx.globalAlpha = 1;
+        }
+
+        canvas.addEventListener("pointerdown", (event) => {
+          drawing = true;
+          canvas.setPointerCapture(event.pointerId);
+          drawPoint(event);
+        });
+        canvas.addEventListener("pointermove", (event) => { if (drawing) drawPoint(event); });
+        canvas.addEventListener("pointerup", () => { drawing = false; playTone("soft"); });
+        canvas.addEventListener("pointercancel", () => { drawing = false; });
+        root.querySelectorAll(".sand-color").forEach((button) => {
+          button.addEventListener("click", () => { currentSandColor = button.dataset.color; });
+        });
+        document.getElementById("sandClear").addEventListener("click", () => {
+          ctx.clearRect(0, 0, canvas.clientWidth, canvas.clientHeight);
+          playTone("soft");
+        });
+
+        resize();
+        window.addEventListener("resize", resize, { once: true });
+      }
+
+      function renderBubbles(root) {
+        root.innerHTML = `
+          <div class="bubble-playground" id="bubblePlayground" aria-label="Лопай пузыри"></div>
+          <div class="controls">
+            <button class="primary-button" id="makeBubbles" type="button">✨ Ещё пузырьки</button>
+            <span class="hint" id="bubbleScore">Лопнуто: 0</span>
+          </div>
+          <p class="hint">Нажимай на переливающиеся пузыри, чтобы лопнуть их. Никакой спешки — просто отдыхай.</p>
+        `;
+
+        const playground = document.getElementById("bubblePlayground");
+        let score = 0;
+
+        function addBubbles(amount) {
+          for (let i = 0; i < amount; i++) {
+            const bubble = document.createElement("button");
+            const size = 35 + Math.random() * 65;
+            bubble.className = "floating-bubble";
+            bubble.type = "button";
+            bubble.style.setProperty("--size", `${size}px`);
+            bubble.style.setProperty("--duration", `${7 + Math.random() * 7}s`);
+            bubble.style.left = `${Math.random() * 88}%`;
+            bubble.style.animationDelay = `${Math.random() * 5}s`;
+            bubble.setAttribute("aria-label", "Лопнуть пузырёк");
+            bubble.addEventListener("click", () => {
+              bubble.remove();
+              score++;
+              document.getElementById("bubbleScore").textContent = `Лопнуто: ${score}`;
+              playTone("pop");
+            });
+            playground.appendChild(bubble);
+          }
+        }
+
+        document.getElementById("makeBubbles").addEventListener("click", () => addBubbles(8));
+        addBubbles(14);
+      }
+
+      function renderStones(root) {
+        root.innerHTML = `
+          <div class="play-area">
+            <div id="stoneGarden" style="display:grid;min-height:420px;place-items:center;padding:25px">
+              <div id="stonePattern" style="display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:12px;max-width:550px"></div>
+            </div>
+          </div>
+          <div class="controls">
+            <button class="soft-button" id="stoneReset" type="button">🪨 Перемешать камушки</button>
+            <span class="hint">Перетаскивай камушки и складывай свой узор.</span>
+          </div>
+          <p class="hint">Нажми и держи камушек, чтобы переместить его. Каждый камушек можно покрутить.</p>
+        `;
+
+        const pattern = document.getElementById("stonePattern");
+        const colors = ["#ffb7c9", "#b9a6ff", "#9be6d1", "#ffd98a", "#a8d7ff", "#e9b7f2"];
+
+        function fillStones() {
+          pattern.innerHTML = Array.from({ length: 18 }, (_, index) => {
+            const color = colors[index % colors.length];
+            const width = 46 + (index % 3) * 10;
+            return `<button type="button" class="garden-stone" draggable="true" aria-label="Камушек"
+              style="width:${width}px;height:${width * .72}px;border:3px solid #ffffffb8;border-radius:48% 52% 43% 57%;background:linear-gradient(145deg,#ffffffaa,${color});box-shadow:0 8px 16px #55466b33,inset 0 -5px 8px #76618a22;cursor:grab;transition:transform .25s ease"></button>`;
+          }).join("");
+        }
+
+        pattern.addEventListener("click", (event) => {
+          const stone = event.target.closest(".garden-stone");
+          if (!stone) return;
+          const rotation = (Number(stone.dataset.rotation || 0) + 45) % 360;
+          stone.dataset.rotation = String(rotation);
+          stone.style.transform = `rotate(${rotation}deg)`;
+          playTone("soft");
+        });
+
+        pattern.addEventListener("dragstart", (event) => {
+          if (event.target.closest(".garden-stone")) {
+            event.dataTransfer.setData("text/plain", "stone");
+            event.dataTransfer.effectAllowed = "move";
+          }
+        });
+        pattern.addEventListener("dragover", (event) => event.preventDefault());
+        pattern.addEventListener("drop", (event) => {
+          event.preventDefault();
+          const stone = event.target.closest(".garden-stone");
+          if (stone && event.dataTransfer.getData("text/plain") === "stone") {
+            pattern.appendChild(stone);
+            playTone("drop");
+          }
+        });
+
+        document.getElementById("stoneReset").addEventListener("click", fillStones);
+        fillStones();
+      }
+
+      document.getElementById("soundToggle").addEventListener("click", (event) => {
+        soundOn = !soundOn;
+        event.currentTarget.textContent = soundOn ? "🔊 Звук включён" : "🔇 Звук выключен";
+        event.currentTarget.setAttribute("aria-pressed", String(soundOn));
+        if (soundOn) playTone("sparkle");
+      });
+
+      buildNavigation();
+      openSection("slime");
+    })();
+  </script>
+</body>
+</html>
